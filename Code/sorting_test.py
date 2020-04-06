@@ -175,6 +175,7 @@ class StringSortTest(unittest.TestCase):
 
     def test_sort_on_fish_book_title(self):
         items = 'one fish two fish red fish blue fish'.split()
+        print(items)
         sorted_items = sorted(items)  # Create a copy of list in sorted order
         sort(items)  # Call mutative sort function to sort list items in place
         assert items == sorted_items
@@ -215,7 +216,7 @@ def get_sort_function():
 
 
 # If using PyTest, change this variable to the sort function you want to test
-sort = bubble_sort
+sort = insertion_sort
 
 
 if __name__ == '__main__':

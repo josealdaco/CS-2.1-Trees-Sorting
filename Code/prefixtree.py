@@ -35,15 +35,30 @@ class PrefixTree:
 
     def is_empty(self):
         """Return True if this prefix tree is empty (contains no strings)."""
-        # TODO
+        return self.size == 0
 
     def contains(self, string):
         """Return True if this prefix tree contains the given string."""
-        # TODO
+        node = self.root
+        for char in string:
+            if node.has_child(char):
+                node = node.get_child(char)
+            else:  # Doesn't exist
+                return False
+        return node.is_terminal()
 
     def insert(self, string):
         """Insert the given string into this prefix tree."""
-        # TODO
+        node = self.root
+        for char in string:
+            if node.has_child(char):
+                node = node.get_child(char)
+            else:
+                node.add_child(char, PrefixTreeNode(char))
+                node = node.get_child(char)
+        if not node.is_terminal():
+            self.size += 1
+            node.terminal = True
 
     def _find_node(self, string):
         """Return a pair containing the deepest node in this prefix tree that
@@ -53,28 +68,52 @@ class PrefixTree:
         # Match the empty string
         if len(string) == 0:
             return self.root, 0
-        # Start with the root node
-        node = self.root
-        # TODO
+
+        # Start with the root node and depth counter
+        node, depth = self.root, 0
+        for char in string:
+            if node.has_child(char):
+                node = node.get_child(char)
+                depth += 1
+            else:
+                depth = 0  # This will break everything, the prefix must match
+                break
+        return node, depth
 
     def complete(self, prefix):
         """Return a list of all strings stored in this prefix tree that start
         with the given prefix string."""
         # Create a list of completions in prefix tree
         completions = []
-        # TODO
+
+        # Unpacking the node and depth from _find_node()
+        node, depth = self._find_node(prefix)
+
+        if depth == 0:  # Diver didn't make it, rip. (Didn't find a node)
+            return completions
+
+        # A node was retrieved, traverse it.
+        self._traverse(node, prefix, completions.append)
+        return completions
 
     def strings(self):
         """Return a list of all strings stored in this prefix tree."""
         # Create a list of all strings in prefix tree
         all_strings = []
-        # TODO
+        self._traverse(self.root, '', all_strings.append)
+        return all_strings
 
     def _traverse(self, node, prefix, visit):
         """Traverse this prefix tree with recursive depth-first traversal.
         Start at the given node with the given prefix representing its path in
         this prefix tree and visit each node with the given visit function."""
-        # TODO
+        # Once the node is filled with characters and contains a terminal node, it'll append
+        print("This is the default prefix", prefix)
+        if node.is_terminal():
+            visit(prefix)
+        for char in node.children.keys():
+            next_node = node.get_child(char)
+            self._traverse(next_node, prefix + char, visit)
 
 
 def create_prefix_tree(strings):
@@ -119,23 +158,26 @@ def create_prefix_tree(strings):
 
 
 def main():
+    obj = PrefixTree()
+    obj.insert('jose')
+    print("Result", obj.complete('jj'))
     # Simpe test case of string with partial substring overlaps
-    strings = ['ABC', 'ABD', 'A', 'XYZ']
-    create_prefix_tree(strings)
-
-    # Create a dictionary of tongue-twisters with similar words to test with
-    tongue_twisters = {
-        'Seashells': 'Shelly sells seashells by the sea shore'.split(),
-        # 'Peppers': 'Peter Piper picked a peck of pickled peppers'.split(),
-        # 'Woodchuck': ('How much wood would a wood chuck chuck'
-        #                ' if a wood chuck could chuck wood').split()
-    }
-    # Create a prefix tree with the similar words in each tongue-twister
-    for name, strings in tongue_twisters.items():
-        print(f'{name} tongue-twister:')
-        create_prefix_tree(strings)
-        if len(tongue_twisters) > 1:
-            print('\n' + '='*80 + '\n')
+    # strings = ['ABC', 'ABD', 'A', 'XYZ']
+    # create_prefix_tree(strings)
+    #
+    # # Create a dictionary of tongue-twisters with similar words to test with
+    # tongue_twisters = {
+    #     'Seashells': 'Shelly sells seashells by the sea shore'.split(),
+    #     # 'Peppers': 'Peter Piper picked a peck of pickled peppers'.split(),
+    #     # 'Woodchuck': ('How much wood would a wood chuck chuck'
+    #     #                ' if a wood chuck could chuck wood').split()
+    # }
+    # # Create a prefix tree with the similar words in each tongue-twister
+    # for name, strings in tongue_twisters.items():
+    #     print(f'{name} tongue-twister:')
+    #     create_prefix_tree(strings)
+    #     if len(tongue_twisters) > 1:
+    #         print('\n' + '='*80 + '\n')
 
 
 if __name__ == '__main__':

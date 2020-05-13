@@ -4,7 +4,10 @@
 def is_sorted(items):
     """Return a boolean indicating whether given items are in sorted order.
     TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
+    TODO: Memory usage: ??? Why and under what conditions?
+    Running time: O(n) we're iterating over all elements
+    Memory usage: O(1) we're not creating new memory
+    """
     if len(items) <= 1:
         return True
 
@@ -32,7 +35,11 @@ def bubble_sort(items):
     """Sort given items by swapping adjacent items that are out of order, and
     repeating until all items are in sorted order.
     TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
+    TODO: Memory usage: ??? Why and under what conditions?
+    Running time: avg O(n^2) because we have an outer loop iterating over all
+    elements and an inner loop iterating over elements n - 1 - i
+    Memory usage: O(1) we're never creating new memory and doing it in place.
+    """
     # TODO: Repeat until all items are in sorted order
     # TODO: Swap adjacent items that are out of order
     if len(items) <= 1:
@@ -65,7 +72,10 @@ def selection_sort(items):
     """Sort given items by finding minimum item, swapping it with first
     unsorted item, and repeating until all items are in sorted order.
     TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
+    TODO: Memory usage: ??? Why and under what conditions?
+    Running time: O(n^2) we have two loops iterating over all the elements
+    Memory usage: O(1) we're never creating new memory and doing it in place.
+    """
     # TODO: Repeat until all items are in sorted order
     # TODO: Find minimum item in unsorted items
     # TODO: Swap it with first unsorted item
@@ -99,7 +109,11 @@ def insertion_sort(items):
     """Sort given items by taking first unsorted item, inserting it in sorted
     order in front of items, and repeating until all items are in order.
     TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
+    TODO: Memory usage: ??? Why and under what conditions?
+    Running time: O(n^2) because we have one loop iterating over all elements
+    and a nested loop that also iterates over n-1 elements.
+    Memory usage: O(1) we're never creating new memory and doing it in place.
+    """
     # TODO: Repeat until all items are in sorted order
     # TODO: Take first unsorted item
     # TODO: Insert it in sorted order in front of items

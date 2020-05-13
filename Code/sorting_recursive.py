@@ -6,7 +6,12 @@ def merge(items1, items2):
     """Merge given lists of items, each assumed to already be in sorted order,
     and return a new list containing all items in sorted order.
     TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
+    TODO: Memory usage: ??? Why and under what conditions?
+    Running time: O(n) it iterates of (n) items given
+    Memory usage: O(n) we're storing (n) merged items in a new array.
+
+    """
+
     # TODO: Repeat until one list is empty
     # TODO: Find minimum item in both lists and append it to new list
     # TODO: Append remaining items in non-empty list to new list
@@ -38,7 +43,10 @@ def split_sort_merge(items):
     sorting each with an iterative sorting algorithm, and merging results into
     a list in sorted order.
     TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
+    TODO: Memory usage: ??? Why and under what conditions?
+    Running time: avg O(n^2) because of insertion_sort
+    Memory usage: O(n) because we're creating an array of (n) elements to merge
+    """
     # TODO: Split items list into approximately equal halves
     # TODO: Sort each half using any other sorting algorithm
     # TODO: Merge sorted halves into one list in sorted order
@@ -55,7 +63,11 @@ def merge_sort(items):
     """Sort given items by splitting list into two approximately equal halves,
     sorting each recursively, and merging results into a list in sorted order.
     TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
+    TODO: Memory usage: ??? Why and under what conditions?
+    Running time: O(nlogn) for both because merge_sort is splitting the items in
+    half each time and merge is taking both lists so (n) elements.
+    Memory usage: O(n) because in each recursive call it creates a new array
+    which take no more than (n) elements and after the merge it is deleted."""
     # TODO: Check if list is so small it's already sorted (base case)  10,9,8,7,6,5,4,3,2,1
     # TODO: Split items list into approximately equal halves
     # TODO: Sort each half by recursively calling merge sort
@@ -74,89 +86,47 @@ def merge_sort(items):
 
 def partition(items, low, high):
     """Return index `p` after in-place partitioning given items in range
-    `[low...high]` by choosing a pivot (TODO: document your method here) from
+    `[low...high]` by choosing a pivot (the very first item) from
     that range, moving pivot into index `p`, items less than pivot into range
     `[low...p-1]`, and items greater than pivot into range `[p+1...high]`.
-    TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
+    Best case running time: O(nlogn) if you partition the middle in a sorted list
+    Worst case running time: O(n^2) if the pivot is the first/last or you're
+    sorting it and when it's already sorted
+    Memory usage:
+        - Best: O(logn) which depends on the tree height
+        - Worst: O(n) this is usually the case when the running time is O(n^2)"""
 
-    # Pivot will start in the middle, between low and high given points
-    # TODO: Choose a pivot any way and document your method in docstring above
-    # TODO: Loop through all items in range [low...high]
-    # TODO: Move items less than pivot into front of range [low...p-1]
-    # TODO: Move items greater than pivot into back of range [p+1...high]
-    # TODO: Move pivot item into final position [p] and return index p
-    pivot_point = ((high)+low)//2
-    print("Pivot point", pivot_point, "low", low, "high", high)
-    pivot = items[pivot_point]  # start in the middle
+    pivot = items[low]
     low_index, high_index = low, high
-    dict_index = {"low": [],
-                  "high": [],
-                  "list": []
-                  }
-    while low_index < pivot_point and high_index > pivot_point:
-        if items[low_index] > pivot:
-            dict_index["low"].append(low_index)
-        else:
-            dict_index["list"].append(("low", low_index))
-        print("High index", high_index, items)
-        if items[high_index] < pivot:
-            dict_index["high"].append(high_index)
-        else:
-            dict_index["list"].append(("high", high_index))
-        low_index += 1
-        high_index -= 1
-    #  Add pivot to the last in low section
-    #  Change later
-    temp_list = []
-    dict_index['list'].insert(0, ('high', pivot_point))
-    for index in range(len(dict_index['list'])):
-        if dict_index['list'][index][0] == 'low':
-            temp_list.insert(0, items[dict_index['list'][index][1]])
-        else:
-            temp_list.append(items[dict_index['list'][index][1]])
-    for lower in range(len(dict_index['low'])):
-        temp_list.append(items[dict_index['low'][lower]])
-        if pivot_point > 0:
-            pivot_point -= 1
-    for higher in range(len(dict_index['high'])):
-        temp_list.insert(0, items[dict_index['high'][higher]])
-        pivot_point += 1
-    print("Items", items, "temp", temp_list)
-    items.clear()
-    for final_index in range(len(temp_list)):
-        items.append(temp_list[final_index])
-    return pivot_point
+
+    while low_index < high_index:
+        while items[low_index] <= pivot and low_index < high_index:
+            low_index += 1
+        while items[high_index] > pivot:
+            high_index -= 1
+        if (low_index < high_index):
+            items[low_index], items[high_index] = items[high_index], items[low_index]
+    items[low], items[high_index] = items[high_index], items[low]  # Swaps the pivot
+    return high_index  # returns the index of the partition
 
 
 def quick_sort(items, low=None, high=None):
     """Sort given items in place by partitioning items in range `[low...high]`
     around a pivot item and recursively sorting each remaining sublist range.
-    TODO: Best case running time: ??? Why and under what conditions?
-    TODO: Worst case running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
-    # TODO: Check if high and low range bounds have default values (not given)
-    # TODO: Check if list or range is so small it's already sorted (base case)
-    # TODO: Partition items in-place around a pivot and get index of pivot
-    # TODO: Sort each sublist range by recursively calling quick sort
-    # Check if high and low range bounds have default values (not given)
+    Best case running time: O(nlogn) if you partition the middle in a sorted list
+    Worst case running time: O(n^2) if the pivot is the first/last or you're
+    sorting it and when it's already sorted
+    Memory usage:
+        - Best: O(logn) which depends on the tree height
+        - Worst: O(n) this is usually the case when the running time is O(n^2)"""
     if low is None and high is None:
         low, high = 0, len(items) - 1
 
     # Check if list or range is so small it's already sorted (base case)
-    if high > 1:
-        # Partition items in-place around a pivot and get index of pivot
-        # O(n): iterates the entire list
+    if low < high:
         partitioned_loc = partition(items, low, high)
-        # Sort each sublist range by recursively calling quick sort
-        quick_sort(items, low, partitioned_loc)
-        print("Partition", partitioned_loc, items)
-        quick_sort(items, partitioned_loc + 1, high-1)
-    return
+        quick_sort(items, low, partitioned_loc - 1)
+        quick_sort(items, partitioned_loc + 1, high)
 
 
-if __name__ == "__main__":
-    #  Merge
-    print(merge_sort([3, 15, 4, 7, 20, 6, 18, 11, 9, 7]))
-    list = [41, 3, 15, 4, 1, 20, 51, 18, 11, 9, 7]
-    quick_sort(list)
+# if __name__ == "__main__":
